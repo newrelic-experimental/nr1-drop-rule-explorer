@@ -1,20 +1,20 @@
 [![New Relic Experimental header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Experimental.png)](https://opensource.newrelic.com/oss-category/#new-relic-experimental)
 
 # NR1 Drop Rule Explorer 
-![GitHub forks](https://img.shields.io/github/forks/newrelic-experimental/newrelic-experimental-FIT-template?style=social)
-![GitHub stars](https://img.shields.io/github/stars/newrelic-experimental/newrelic-experimental-FIT-template?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/newrelic-experimental/newrelic-experimental-FIT-template?style=social)
+![GitHub forks](https://img.shields.io/github/forks/newrelic-experimental/nr1-drop-rule-explorer?style=social)
+![GitHub stars](https://img.shields.io/github/stars/newrelic-experimental/nr1-drop-rule-explorer?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/newrelic-experimental/nr1-drop-rule-explorer?style=social)
 
-![GitHub all releases](https://img.shields.io/github/downloads/newrelic-experimental/newrelic-experimental-FIT-template/total)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/newrelic-experimental/newrelic-experimental-FIT-template)
-![GitHub last commit](https://img.shields.io/github/last-commit/newrelic-experimental/newrelic-experimental-FIT-template)
-![GitHub Release Date](https://img.shields.io/github/release-date/newrelic-experimental/newrelic-experimental-FIT-template)
+![GitHub all releases](https://img.shields.io/github/downloads/newrelic-experimental/nr1-drop-rule-explorer/total)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/newrelic-experimental/nr1-drop-rule-explorer)
+![GitHub last commit](https://img.shields.io/github/last-commit/newrelic-experimental/nr1-drop-rule-explorer)
+![GitHub Release Date](https://img.shields.io/github/release-date/newrelic-experimental/nr1-drop-rule-explorer)
 
 
-![GitHub issues](https://img.shields.io/github/issues/newrelic-experimental/newrelic-experimental-FIT-template)
-![GitHub issues closed](https://img.shields.io/github/issues-closed/newrelic-experimental/newrelic-experimental-FIT-template)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/newrelic-experimental/newrelic-experimental-FIT-template)
-![GitHub pull requests closed](https://img.shields.io/github/issues-pr-closed/newrelic-experimental/newrelic-experimental-FIT-template)
+![GitHub issues](https://img.shields.io/github/issues/newrelic-experimental/nr1-drop-rule-explorer)
+![GitHub issues closed](https://img.shields.io/github/issues-closed/newrelic-experimental/nr1-drop-rule-explorer)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/newrelic-experimental/nr1-drop-rule-explorer)
+![GitHub pull requests closed](https://img.shields.io/github/issues-pr-closed/newrelic-experimental/nr1-drop-rule-explorer)
 
 
 Allows you to view the drop rules in your account.
