@@ -52,7 +52,6 @@ function DropRuleExplorer() {
     items={items}
     selected={({ index }) => index === selectedRow}
     onSelect={(evt, { index }) => {
-
       const populateInfo = (itemIndex) =>{
         if(itemIndex!=null) {
           setSelectedItem(items[itemIndex])
@@ -62,7 +61,7 @@ function DropRuleExplorer() {
       }
 
       setSelectedRow((prevState) => {
-        if(prevState) {
+        if(prevState!=null) {
           if(prevState === index) {
             populateInfo(null)
             return null //de-select
