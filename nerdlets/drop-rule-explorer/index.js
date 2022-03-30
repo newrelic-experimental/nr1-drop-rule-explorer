@@ -350,7 +350,7 @@ function DropRuleExplorer() {
             label="Account:"
             labelInline
             value={ selectedAccountId}
-            onChange={(_,value)=>setSelectedAccountId(value)}
+            onChange={(_,value)=>{setSelectedItem(null); setSelectedAccountId(value); }}
           />
         
           return (<>
