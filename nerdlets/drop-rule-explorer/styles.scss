@@ -1,0 +1,33 @@
+.outerContainer {
+  padding:2em;
+}
+
+.detailPaneContainer {
+  margin-top: 2em;
+}
+
+.dropRulesContainer {
+  margin-top: 1em;
+  padding-left: 0.5em;
+}
+
+.summaryLine {
+  margin-top: 2em;
+  padding-left: 0.5em;
+}
+
+.accountPicker {
+  margin-top:2em;
+  padding-left: 0.5em;
+}
+.codeBlock {
+  margin-top: 1em;
+  margin-bottom: 2em;
+  color: #42adb3;
+  padding-left: 0em;
+  white-space: pre-wrap;       /* css-3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}

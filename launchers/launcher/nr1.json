@@ -1,0 +1,7 @@
+{
+  "schemaType": "LAUNCHER",
+  "id": "launcher",
+  "displayName": "Drop Rule Explorer",
+  "description": "Explore account drop rules",
+  "rootNerdletId": "drop-rule-explorer"
+}
