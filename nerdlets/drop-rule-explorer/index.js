@@ -80,7 +80,7 @@ function DropRuleExplorer() {
     
     <TableHeader>
       <TableHeaderCell   
-            width="fit-content"
+            width="3fr"
             sortable
             sortingType={sortingColumnsState[columnIndex]}
             onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
@@ -88,7 +88,7 @@ function DropRuleExplorer() {
         Description
       </TableHeaderCell>
       <TableHeaderCell 
-            width="fit-content"
+            width="1fr"
             sortable
             sortingType={sortingColumnsState[columnIndex]}
             onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
@@ -96,7 +96,7 @@ function DropRuleExplorer() {
         Action
       </TableHeaderCell>
       <TableHeaderCell 
-            width="fit-content"
+            width="1fr"
             sortable
             sortingType={sortingColumnsState[columnIndex]}
             onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
@@ -104,7 +104,7 @@ function DropRuleExplorer() {
         Source
       </TableHeaderCell>
       <TableHeaderCell 
-            width="fit-content"
+            width="1fr"
             sortable
             sortingType={sortingColumnsState[columnIndex]}
             onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
@@ -112,7 +112,7 @@ function DropRuleExplorer() {
         Creator
       </TableHeaderCell>
       <TableHeaderCell 
-            width="fit-content"
+            width="1fr"
             sortable
             sortingType={sortingColumnsState[columnIndex]}
             onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
@@ -120,7 +120,7 @@ function DropRuleExplorer() {
         Create time
       </TableHeaderCell>
       <TableHeaderCell 
-            width="fit-content"
+            width="5fr"
             sortable
             sortingType={sortingColumnsState[columnIndex]}
             onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
