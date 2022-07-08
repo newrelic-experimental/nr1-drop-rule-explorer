@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { navigation, BlockText,AccountsQuery, AccountPicker, NerdGraphQuery, Spinner, Table, TableHeader, TableHeaderCell,TableRow, TableRowCell, Tile, HeadingText, TileGroup, Link } from 'nr1';
+import { Dropdown, DropdownItem, BlockText,AccountsQuery, AccountPicker, NerdGraphQuery, Spinner, Table, TableHeader, TableHeaderCell,TableRow, TableRowCell, Tile, HeadingText, TileGroup, Link, Form, TextField, Button } from 'nr1';
+import { CreateDropRule, DeleteDropRule } from "./utils"
 
 function DropRuleExplorer() {
   const [selectedAccountId, setSelectedAccountId] = useState(null);
@@ -8,8 +9,12 @@ function DropRuleExplorer() {
   const [sortColumn, setSortColumn] = useState(0);
   const [selectedItem, setSelectedItem]  = useState(null);
 
+  const [newNRQL, setNewNRQL]  = useState("");
+  const [newDescription, setNewDescription]  = useState("");
+  const [newType, setNewType]  = useState({title: "Drop data (DROP_DATA)", action: "DROP_DATA" });
+
   
-  const tableRender = (data) =>{
+  const tableRender = (data,refetch,createForm) =>{
     let items = data.map((rule)=>{
       let createTime= new Date(rule.createdAt)
       return {
@@ -45,101 +50,121 @@ function DropRuleExplorer() {
 
     let columnIndex=0
 
-    return <Table
-    className="dropRulesContainer"
-    multivalue
-    selectionType={Table.SELECTION_TYPE.SINGLE}
-    items={items}
-    selected={({ index }) => index === selectedRow}
-    onSelect={(evt, { index }) => {
-      const populateInfo = (itemIndex) =>{
-        if(itemIndex!=null) {
-          setSelectedItem(items[itemIndex])
-        } else {
-          setSelectedItem(null)
-        } 
-      }
+    const tableClickActions = () => {
+      return [
+          {
+              label: 'Delete drop rule',
+              type: TableRow.ACTION_TYPE.DESTRUCTIVE,
+              onClick: (evt, { item, index }) => {
+                 DeleteDropRule(selectedAccountId, item.id).then(refetch);
+              }
+          }
+      ]
+  }
 
-      setSelectedRow((prevState) => {
-        if(prevState!=null) {
-          if(prevState === index) {
-            populateInfo(null)
-            return null //de-select
+
+
+    return <>
+      <Table
+      className="dropRulesContainer"
+      multivalue
+      selectionType={Table.SELECTION_TYPE.SINGLE}
+      items={items}
+      selected={({ index }) => index === selectedRow}
+      onSelect={(evt, { index }) => {
+        const populateInfo = (itemIndex) =>{
+          if(itemIndex!=null) {
+            setSelectedItem(items[itemIndex])
+          } else {
+            setSelectedItem(null)
+          } 
+        }
+
+        setSelectedRow((prevState) => {
+          if(prevState!=null) {
+            if(prevState === index) {
+              populateInfo(null)
+              return null //de-select
+            } else {
+              populateInfo(index)
+              return index
+            }
           } else {
             populateInfo(index)
             return index
           }
-        } else {
-          populateInfo(index)
-          return index
-        }
-      });
-    }}
-  >
-    
-    <TableHeader>
-      <TableHeaderCell   
-            width="3fr"
-            sortable
-            sortingType={sortingColumnsState[columnIndex]}
-            onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
-            value={({ item }) => item.id}>
-        Description
-      </TableHeaderCell>
-      <TableHeaderCell 
-            width="1fr"
-            sortable
-            sortingType={sortingColumnsState[columnIndex]}
-            onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
-            value={({ item }) => item.action}>
-        Action
-      </TableHeaderCell>
-      <TableHeaderCell 
-            width="1fr"
-            sortable
-            sortingType={sortingColumnsState[columnIndex]}
-            onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
-            value={({ item }) => item.source}>
-        Source
-      </TableHeaderCell>
-      <TableHeaderCell 
-            width="1fr"
-            sortable
-            sortingType={sortingColumnsState[columnIndex]}
-            onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
-            value={({ item }) => item.creatorName}>
-        Creator
-      </TableHeaderCell>
-      <TableHeaderCell 
-            width="1fr"
-            sortable
-            sortingType={sortingColumnsState[columnIndex]}
-            onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
-            value={({ item }) => item.createdAt}>
-        Create time
-      </TableHeaderCell>
-      <TableHeaderCell 
-            width="5fr"
-            sortable
-            sortingType={sortingColumnsState[columnIndex]}
-            onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
-            value={({ item }) => item.nrql}>
-        NRQL
-      </TableHeaderCell>
-    </TableHeader>
+        });
+      }}
+    >
 
-    {({ item }) => (
-      <TableRow>
-        <TableRowCell additionalValue={`ID: ${item.id}`}>{item.description}</TableRowCell>
-        <TableRowCell>{item.action}</TableRowCell>
-        <TableRowCell>{item.source}</TableRowCell>
-        <TableRowCell additionalValue={item.creatorEmail}>{item.creatorName}</TableRowCell>
-        <TableRowCell>{item.createdAtLocal}</TableRowCell>
-        <TableRowCell>{item.nrql}</TableRowCell>
-      </TableRow>
-    )}
-  </Table>
+      
+      <TableHeader>
+        <TableHeaderCell   
+              width="3fr"
+              sortable
+              sortingType={sortingColumnsState[columnIndex]}
+              onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
+              value={({ item }) => item.id}>
+          Description
+        </TableHeaderCell>
+        <TableHeaderCell 
+              width="1fr"
+              sortable
+              sortingType={sortingColumnsState[columnIndex]}
+              onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
+              value={({ item }) => item.action}>
+          Action
+        </TableHeaderCell>
+        <TableHeaderCell 
+              width="1fr"
+              sortable
+              sortingType={sortingColumnsState[columnIndex]}
+              onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
+              value={({ item }) => item.source}>
+          Source
+        </TableHeaderCell>
+        <TableHeaderCell 
+              width="1fr"
+              sortable
+              sortingType={sortingColumnsState[columnIndex]}
+              onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
+              value={({ item }) => item.creatorName}>
+          Creator
+        </TableHeaderCell>
+        <TableHeaderCell 
+              width="1fr"
+              sortable
+              sortingType={sortingColumnsState[columnIndex]}
+              onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
+              value={({ item }) => item.createdAt}>
+          Create time
+        </TableHeaderCell>
+        <TableHeaderCell 
+              width="5fr"
+              sortable
+              sortingType={sortingColumnsState[columnIndex]}
+              onClick={_onClickTableHeaderCell.bind(this, columnIndex++)}
+              value={({ item }) => item.nrql}>
+          NRQL
+        </TableHeaderCell>
+      </TableHeader>
+
+      {({ item }) => (
+        <TableRow   actions={tableClickActions()}>
+          <TableRowCell additionalValue={`ID: ${item.id}`}>{item.description}</TableRowCell>
+          <TableRowCell>{item.action}</TableRowCell>
+          <TableRowCell>{item.source}</TableRowCell>
+          <TableRowCell additionalValue={item.creatorEmail}>{item.creatorName}</TableRowCell>
+          <TableRowCell>{item.createdAtLocal}</TableRowCell>
+          <TableRowCell>{item.nrql}</TableRowCell>
+        </TableRow>
+      )}
+    </Table>
+    {createForm()}
+  </>
   }
+
+
   
   const dropRulesTable = () => {
       if(selectedAccountId) {
@@ -178,7 +203,8 @@ function DropRuleExplorer() {
           accountId: selectedAccountId,
         };
         return <NerdGraphQuery query={query} variables={variables}>
-        {({ loading, error, data }) => {
+        {({ loading, error, data, refetch }) => {
+          
           if (loading) {
             return <div className="dropRulesContainer"><Spinner inline/> Looking for drop rules...</div>
           }
@@ -187,16 +213,43 @@ function DropRuleExplorer() {
             return 'Error!';
           }
 
+          const createForm = () =>{
+            if(selectedAccountId) {
+            return  <div className="newForm">
+              <hr />
+            <h3>Create new drop rule</h3>
+            <div>
+                <Form>
+                  <Dropdown label="Drop type" title={newType.title}>
+                    <DropdownItem onClick={(evt) => setNewType({title: "Drop data (DROP_DATA)", action: "DROP_DATA" })}>Drop data (DROP_DATA)</DropdownItem>
+                    <DropdownItem onClick={(evt) => setNewType({title: "Drop attributes (DROP_ATTRIBUTES)", action: "DROP_ATTRIBUTES" })}>Drop attributes (DROP_ATTRIBUTES)</DropdownItem>
+                    <DropdownItem onClick={(evt) => setNewType({title: "Drop metric aggregate attributes (DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES)", action: "DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES" })}>Drop metric aggregate attributes (DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES)</DropdownItem>
+                  </Dropdown>
+                  <TextField info="A valid NRQL query for the chosen action" style={{width:'100%'}} label="NRQL" onChange={event => {setNewNRQL(event.target.value) }} />
+                  <TextField style={{width:'100%'}} label="Description" onChange={event => {setNewDescription( event.target.value) }} />
+                  <Button type={Button.TYPE.PRIMARY} onClick={() => CreateDropRule(selectedAccountId, {description: newDescription, nrql: newNRQL, type: newType.action}, refetch, ()=>{ setNewNRQL(null); setNewDescription(null); })}>Create Drop Rule</Button>
+                </Form>
+                <div className="docsLink" >
+                <Link to="https://docs.newrelic.com/docs/data-apis/manage-data/drop-data-using-nerdgraph">Documentation on drop rules</Link>
+                </div>
+              </div>
+              </div>
+            }
+          }
+
           if(data.actor.dropRules.nrqlDropRules.list.rules.length > 0) {
             return <>
               <BlockText className="summaryLine">
                 <strong>{data.actor.dropRules.nrqlDropRules.list.rules.length}</strong>{` drop rules found for account "${data.actor.accountDetails.name}"`}. Select a rule to view details.
               </BlockText>
-               {tableRender(data.actor.dropRules.nrqlDropRules.list.rules)}
+               {tableRender(data.actor.dropRules.nrqlDropRules.list.rules,refetch,createForm)}
                
              </>
           } else {
-            return <div className="dropRulesContainer">There are no drop rules for account: "{data.actor.accountDetails.name}" ({selectedAccountId}).</div>
+            return <>
+              <div className="dropRulesContainer">There are no drop rules for account: "{data.actor.accountDetails.name}" ({selectedAccountId}).</div>
+              {createForm()}
+            </>
           }
           
         }}
@@ -324,9 +377,9 @@ function DropRuleExplorer() {
     } else {
       return null
     }
-    
-
   }
+
+
 
   return (
     <div className="outerContainer">
