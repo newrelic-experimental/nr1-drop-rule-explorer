@@ -57,6 +57,7 @@ function DropRuleExplorer() {
               type: TableRow.ACTION_TYPE.DESTRUCTIVE,
               onClick: (evt, { item, index }) => {
                  DeleteDropRule(selectedAccountId, item.id).then(refetch);
+                 setSelectedItem(null);
               }
           }
       ]

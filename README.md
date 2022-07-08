@@ -17,7 +17,9 @@
 ![GitHub pull requests closed](https://img.shields.io/github/issues-pr-closed/newrelic-experimental/nr1-drop-rule-explorer)
 
 
-Allows you to view the drop rules in your account.
+Allows you to view, dlete and create the drop rules in your accounts.
+
+![screenshot](screenshot.png)
 
 ## Installation
 
@@ -28,7 +30,7 @@ Allows you to view the drop rules in your account.
 
 ## Getting Started
 
-There is nothing to configure.
+There is nothing to configure. Isstall and use.
 
 ## Support
 
