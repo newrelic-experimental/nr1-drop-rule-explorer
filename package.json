@@ -1,7 +1,7 @@
 {
     "private": true,
     "name": "drop-rule-explorer",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "scripts": {
         "start": "nr1 nerdpack:serve",
         "test": "exit 0"
