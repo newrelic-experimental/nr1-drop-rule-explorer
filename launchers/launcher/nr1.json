@@ -1,7 +1,7 @@
 {
   "schemaType": "LAUNCHER",
   "id": "launcher",
-  "displayName": "JSBFET - Drop Rule Explorer",
-  "description": "Explore account drop rules",
+  "displayName": "Drop Rule Explorer",
+  "description": "Explore and edit account drop rules",
   "rootNerdletId": "drop-rule-explorer"
 }

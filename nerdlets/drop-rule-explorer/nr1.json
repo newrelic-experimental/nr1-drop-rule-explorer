@@ -1,6 +1,6 @@
 {
   "schemaType": "NERDLET",
   "id": "drop-rule-explorer",
-  "displayName": "JSBFET - Drop Rule Explorer",
-  "description": ""
+  "displayName": "Drop Rule Explorer",
+  "description": "Explore and edit drop rules"
 }
