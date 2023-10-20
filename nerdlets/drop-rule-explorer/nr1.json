@@ -2,5 +2,5 @@
   "schemaType": "NERDLET",
   "id": "drop-rule-explorer",
   "displayName": "Drop Rule Explorer",
-  "description": ""
+  "description": "Explore and edit drop rules"
 }

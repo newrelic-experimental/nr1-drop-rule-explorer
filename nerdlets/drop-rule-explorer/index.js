@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { Dropdown, DropdownItem, BlockText,AccountsQuery, AccountPicker, NerdGraphQuery, Spinner, Table, TableHeader, TableHeaderCell,TableRow, TableRowCell, Tile, HeadingText, TileGroup, Link, Form, TextField, Button } from 'nr1';
 import { CreateDropRule, DeleteDropRule } from "./utils"
 
+const DROP_TYPE_NAMES = {
+  "DROP_DATA" : "Drop data (DROP_DATA)",
+  "DROP_ATTRIBUTES" : "Drop attributes (DROP_ATTRIBUTES)",
+  "DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES" : "Drop metric aggregate attributes (DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES)"
+}
+
 function DropRuleExplorer() {
   const [selectedAccountId, setSelectedAccountId] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -11,8 +17,18 @@ function DropRuleExplorer() {
 
   const [newNRQL, setNewNRQL]  = useState("");
   const [newDescription, setNewDescription]  = useState("");
-  const [newType, setNewType]  = useState({title: "Drop data (DROP_DATA)", action: "DROP_DATA" });
+  const [newType, setNewType]  = useState("DROP_DATA" );
+  const [newSource, setNewSource]  = useState("NerdGraph");
 
+  //reset state and clear form
+  const resetFormAndState = () => {
+    setSelectedItem(null);
+    setNewType("DROP_DATA");
+    setNewSource("NerdGraph");
+    setNewNRQL("");
+    setNewDescription("");
+    setSelectedRow(null);
+  }
   
   const tableRender = (data,refetch,createForm) =>{
     let items = data.map((rule)=>{
@@ -57,11 +73,12 @@ function DropRuleExplorer() {
               type: TableRow.ACTION_TYPE.DESTRUCTIVE,
               onClick: (evt, { item, index }) => {
                  DeleteDropRule(selectedAccountId, item.id).then(refetch);
-                 setSelectedItem(null);
+                 resetFormAndState();
               }
           }
       ]
   }
+
 
 
 
@@ -76,8 +93,12 @@ function DropRuleExplorer() {
         const populateInfo = (itemIndex) =>{
           if(itemIndex!=null) {
             setSelectedItem(items[itemIndex])
+            setNewNRQL(items[itemIndex].nrql)
+            setNewDescription(items[itemIndex].description);
+            setNewType(items[itemIndex].action);
+            setNewSource(items[itemIndex].source);
           } else {
-            setSelectedItem(null)
+            resetFormAndState();
           } 
         }
 
@@ -215,22 +236,47 @@ function DropRuleExplorer() {
           }
 
           const createForm = () =>{
+            let H1Title="Create new drop rule";
+            let ButtonText="Create Drop Rule";
+            let typeTitle=DROP_TYPE_NAMES[newType];
+            let typeSelected=null;
+            let sourceTitle=newSource;
+            let sourceSelected=null;
+            let replaceRuleId=null;
+            let buttonType=Button.TYPE.PRIMARY;
+            let description=<p>Use this form to create a new drop rule in account #{selectedAccountId}</p>;
+
+            if(selectedItem!==null) {
+              H1Title="Replace drop rule";
+              ButtonText="Replace Drop Rule";
+              replaceRuleId=selectedItem.id;
+              buttonType=Button.TYPE.DESTRUCTIVE;
+              description=<p>Update and replace the selected rule #{replaceRuleId}. If you want to create a new rule instead <Link onClick={()=>{resetFormAndState()}}>click here.</Link></p>
+            }
             if(selectedAccountId) {
             return  <div className="newForm">
               <hr />
-            <h3>Create new drop rule</h3>
+            <h3>{H1Title}</h3>
+            {description}
+            <br />
+            <br />
             <div>
                 <Form>
-                  <Dropdown label="Drop type" title={newType.title}>
-                    <DropdownItem onClick={(evt) => setNewType({title: "Drop data (DROP_DATA)", action: "DROP_DATA" })}>Drop data (DROP_DATA)</DropdownItem>
-                    <DropdownItem onClick={(evt) => setNewType({title: "Drop attributes (DROP_ATTRIBUTES)", action: "DROP_ATTRIBUTES" })}>Drop attributes (DROP_ATTRIBUTES)</DropdownItem>
-                    <DropdownItem onClick={(evt) => setNewType({title: "Drop metric aggregate attributes (DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES)", action: "DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES" })}>Drop metric aggregate attributes (DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES)</DropdownItem>
+                  <Dropdown label="Drop type" title={typeTitle}>
+                    <DropdownItem selected={typeSelected==="DROP_DATA"} onClick={(evt) => setNewType("DROP_DATA" )}>{DROP_TYPE_NAMES["DROP_DATA"]}</DropdownItem>
+                    <DropdownItem selected={typeSelected==="DROP_ATTRIBUTES"} onClick={(evt) => setNewType("DROP_ATTRIBUTES")}>{DROP_TYPE_NAMES["DROP_ATTRIBUTES"]}</DropdownItem>
+                    <DropdownItem selected={typeSelected==="DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES"} onClick={(evt) => setNewType("DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES")}>{DROP_TYPE_NAMES["DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES"]}</DropdownItem>
                   </Dropdown>
-                  <TextField info="A valid NRQL query for the chosen action" style={{width:'100%'}} label="NRQL" onChange={event => {setNewNRQL(event.target.value) }} />
-                  <TextField style={{width:'100%'}} label="Description" onChange={event => {setNewDescription( event.target.value) }} />
-                  <Button type={Button.TYPE.PRIMARY} onClick={() => CreateDropRule(selectedAccountId, {description: newDescription, nrql: newNRQL, type: newType.action}, refetch, ()=>{ setNewNRQL(null); setNewDescription(null); })}>Create Drop Rule</Button>
+                  <Dropdown label="Source" title={sourceTitle}>
+                    <DropdownItem selected={sourceSelected==="NerdGraph"} onClick={(evt) => setNewSource("NerdGraph")}>NerdGraph</DropdownItem>
+                    <DropdownItem selected={sourceSelected==="Logs"} onClick={(evt) => setNewSource("Logs")}>Logs</DropdownItem>
+                  </Dropdown>
+                  <TextField info="A valid NRQL query for the chosen action" style={{width:'100%'}} label="NRQL" value={newNRQL} onChange={event => {setNewNRQL(event.target.value) }} />
+                  <TextField style={{width:'100%'}} label="Description" value={newDescription} onChange={event => {setNewDescription( event.target.value) }} />
+                  <Button type={buttonType} onClick={() => CreateDropRule(selectedAccountId, replaceRuleId, {description: newDescription, nrql: newNRQL, type: newType, source: newSource}, refetch, ()=>{ resetFormAndState(); setSelectedItem(null); setNewNRQL(null); setNewDescription(null); })}>{ButtonText}</Button>
                 </Form>
                 <div className="docsLink" >
+                
                 <Link to="https://docs.newrelic.com/docs/data-apis/manage-data/drop-data-using-nerdgraph">Documentation on drop rules</Link>
                 </div>
               </div>
@@ -299,7 +345,6 @@ function DropRuleExplorer() {
   nrql        = "${selectedItem.nrql}"
 }
 `
-
       // const launcher = { id: 'data-exploration.query-builder' };
       // const location = navigation.getOpenLauncherLocation(launcher);
       return <TileGroup className="detailPaneContainer" tileWidth="3fr">
@@ -403,7 +448,7 @@ function DropRuleExplorer() {
             className="accountPicker"
             label="Account:"
             labelInline
-            value={ selectedAccountId}
+            value={ selectedAccountId }
             onChange={(_,value)=>{setSelectedItem(null); setSelectedAccountId(value); }}
           />
         
