@@ -40,7 +40,7 @@ function DropRuleExplorer() {
         createdAtLocal: createTime.toLocaleString(),
         createdAt: rule.createdAt,
         nrql: rule.nrql,
-        source: rule.source == "Logging" ? "Logs UI" : rule.source,
+        source: rule.source == "Logging" ? "Logging" : rule.source,
         creatorName: rule.creator.name,
         creatorEmail: rule.creator.email
       }
@@ -269,7 +269,7 @@ function DropRuleExplorer() {
                   </Dropdown>
                   <Dropdown label="Source" title={sourceTitle}>
                     <DropdownItem selected={sourceSelected==="NerdGraph"} onClick={(evt) => setNewSource("NerdGraph")}>NerdGraph</DropdownItem>
-                    <DropdownItem selected={sourceSelected==="Logs"} onClick={(evt) => setNewSource("Logs")}>Logs</DropdownItem>
+                    <DropdownItem selected={sourceSelected==="Logging"} onClick={(evt) => setNewSource("Logging")}>Logs</DropdownItem>
                   </Dropdown>
                   <TextField info="A valid NRQL query for the chosen action" style={{width:'100%'}} label="NRQL" value={newNRQL} onChange={event => {setNewNRQL(event.target.value) }} />
                   <TextField style={{width:'100%'}} label="Description" value={newDescription} onChange={event => {setNewDescription( event.target.value) }} />
