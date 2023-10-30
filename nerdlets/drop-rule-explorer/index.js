@@ -267,7 +267,7 @@ function DropRuleExplorer() {
                     <DropdownItem selected={typeSelected==="DROP_ATTRIBUTES"} onClick={(evt) => setNewType("DROP_ATTRIBUTES")}>{DROP_TYPE_NAMES["DROP_ATTRIBUTES"]}</DropdownItem>
                     <DropdownItem selected={typeSelected==="DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES"} onClick={(evt) => setNewType("DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES")}>{DROP_TYPE_NAMES["DROP_ATTRIBUTES_FROM_METRIC_AGGREGATES"]}</DropdownItem>
                   </Dropdown>
-                  <Dropdown label="Source" title={sourceTitle}>
+                  <Dropdown info="NerdGraph is preferred. If set to 'Logging' the rule will appear in logs UI" label="Source" title={sourceTitle}>
                     <DropdownItem selected={sourceSelected==="NerdGraph"} onClick={(evt) => setNewSource("NerdGraph")}>NerdGraph</DropdownItem>
                     <DropdownItem selected={sourceSelected==="Logging"} onClick={(evt) => setNewSource("Logging")}>Logs</DropdownItem>
                   </Dropdown>
