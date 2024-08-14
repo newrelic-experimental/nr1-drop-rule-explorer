@@ -14,6 +14,7 @@ function DropRuleExplorer() {
   const [sortingType, setSortingType] = useState(0);
   const [sortColumn, setSortColumn] = useState(0);
   const [selectedItem, setSelectedItem]  = useState(null);
+  const [filterTerm, setFilterTerm]  = useState(null);
 
   const [newNRQL, setNewNRQL]  = useState("");
   const [newDescription, setNewDescription]  = useState("");
@@ -21,7 +22,7 @@ function DropRuleExplorer() {
   const [newSource, setNewSource]  = useState("NerdGraph");
 
   //reset state and clear form
-  const resetFormAndState = () => {
+  const resetFormAndState = (cb) => {
     setSelectedItem(null);
     setNewType("DROP_DATA");
     setNewSource("NerdGraph");
@@ -45,7 +46,6 @@ function DropRuleExplorer() {
         creatorEmail: rule.creator.email
       }
     })
-
 
     const _onClickTableHeaderCell = (column, evt, { nextSortingType }) => {
       if (column === sortColumn) {
@@ -284,16 +284,38 @@ function DropRuleExplorer() {
             }
           }
 
-          if(data.actor.dropRules.nrqlDropRules.list.rules.length > 0) {
+          const drawFilterBar = () => {
+            return <div className="filterForm">
+              <Form>
+                <TextField labelInline info="A (case insensitive) regex search pattern on description and NRQL fields" style={{width:'100%'}} label="Filter" value={filterTerm} onChange={event => {resetFormAndState(); setFilterTerm(event.target.value);  }} />
+              </Form>
+            </div>
+          };
+
+
+          const filterData = (rules) => {
+            if(filterTerm == null || filterTerm.length == 0 || filterTerm == "") {
+              return rules;
+            } else {
+              const regex = new RegExp(filterTerm,'i');
+              return rules.filter(rule => {return regex.test(rule.nrql) || regex.test(rule.description)});
+            }
+          };
+
+          const filteredRules=filterData(data.actor.dropRules.nrqlDropRules.list.rules);
+          
+          if(filteredRules.length > 0) {
             return <>
+              {drawFilterBar()}
               <BlockText className="summaryLine">
-                <strong>{data.actor.dropRules.nrqlDropRules.list.rules.length}</strong>{` drop rules found for account "${data.actor.accountDetails.name}"`}. Select a rule to view details.
+                <strong>{filteredRules.length}</strong>{` drop rules found for account "${data.actor.accountDetails.name}"`}. Select a rule to view details.
               </BlockText>
-               {tableRender(data.actor.dropRules.nrqlDropRules.list.rules,refetch,createForm)}
+               {tableRender(filteredRules,refetch,createForm)}
                
              </>
           } else {
             return <>
+              {drawFilterBar()}
               <div className="dropRulesContainer">There are no drop rules for account: "{data.actor.accountDetails.name}" ({selectedAccountId}).</div>
               {createForm()}
             </>
