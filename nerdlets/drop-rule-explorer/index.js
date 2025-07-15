@@ -42,8 +42,8 @@ function DropRuleExplorer() {
         createdAt: rule.createdAt,
         nrql: rule.nrql,
         source: rule.source == "Logging" ? "Logging" : rule.source,
-        creatorName: rule.creator.name,
-        creatorEmail: rule.creator.email
+        creatorName: rule?.creator?.name || "Not available",
+        creatorEmail: rule?.creator?.email || "" 
       }
     })
 
